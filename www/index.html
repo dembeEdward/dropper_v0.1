@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <title></title>
+
+    <link href="lib/ionic/css/ionic.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+
+    <!-- cordova script (this will be a 404 during development) -->
+    <script src="cordova.js"></script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCVgE0rGwJ0_mxl_XgywwoMLjXqab-4Evg&sensor=false"></script>
+    <script src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
+    <script src="js/directives.js"></script>
+    <script src="js/controllers.js"></script>
+    <script src="js/app.js"></script>
+  </head>
+  <body ng-app="starter">
+
+    <ion-pane>
+      <ion-header-bar class="bar-positive">
+        <h1 class="title">Dropper</h1>
+      </ion-header-bar>
+
+      <ion-content ng-controller="homeController">
+
+        <div class="list list-inset">
+          <label class="item item-input">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input type="text" placeholder="search destination" type="text" ng-model="chosenPlace" googleplace>
+          </label>
+          <button class="button button-positive button-block" ng-click="addDestinationAddress()" ng-hide="showQuote">Add</button>
+          <button class="button button-balanced button-block" ng-click="showConfirmQuote()" ng-show="showQuote">Quote</button>
+
+        </div>
+
+        <div class="card">
+          <div class="item item-divider">
+            I'm a Header in a Card!
+          </div>
+          <div class="item item-text-wrap">
+            <div id="map"></div>
+          </div>
+          <div class="item item-divider">
+            I'm a Footer in a Card!
+          </div>
+        </div>
+
+      </ion-content>
+
+      <ion-tabs class="tabs-positive tabs-icon-top">
+        <ion-tab title="Home" icon="ion-home"></ion-tab>
+        <ion-tab title="Settings" icon="ion-gear-a"></ion-tab>
+        <ion-tab title="Profile" icon="ion-person"></ion-tab>
+      </ion-tabs>
+
+    </ion-pane>
+  </body>
+</html>
