@@ -2,6 +2,7 @@ var app = angular.module('controllers', ['directives']);
 
 app.controller('homeController', function($scope, $ionicPopup){
 
+    $scope.platform = ionic.Platform;
     $scope.showQuote = false;
     $scope.gPlace;
     $scope.map;
