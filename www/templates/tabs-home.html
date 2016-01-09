@@ -1,0 +1,19 @@
+<ion-view title="Home" class="center">
+	<ion-content padding="true" ng-class="{'has-header has-tabs-top': platform.isAndroid(), 'has-header': !platform.isAndroid()}">
+    <div class="list list-inset">
+      <label class="item item-input" ng-show="showAddPickUp">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="search pick up" type="text" ng-model="chosenPickUp" googleplace>
+      </label>
+      <label class="item item-input" ng-show="showAddDestination">
+        <i class="icon ion-search placeholder-icon"></i>
+        <input type="text" placeholder="search destination" type="text" ng-model="chosenDestination" googleplace>
+      </label>
+      <button class="button button-positive button-block" ng-click="addPickUpAddress(chosenPickUp)" ng-show="showAddPickUp">Add</button>
+      <button class="button button-energized button-block" ng-click="addDestinationAddress(chosenDestination)" ng-show="showAddDestination">Add</button>
+      <button class="button button-balanced button-block" ng-click="showConfirmQuote(chosenPickUp, chosenDestination)" ng-show="showQuote">Quote</button>
+      <button class="button button-assertive button-block" ng-click="reLoadState()" ng-show="showQuote">Change Location</button>
+    </div>
+    <div id="map"></div>
+  </ion-content>
+</ion-view>

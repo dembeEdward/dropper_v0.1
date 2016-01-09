@@ -3,9 +3,9 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'controllers'])
+angular.module('starter', ['ionic', 'controllers', 'directives','auth0', 'angular-storage', 'angular-jwt', 'firebase', 'MassAutoComplete'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, auth) {
   $ionicPlatform.ready(function() {
     if(window.cordova && window.cordova.plugins.Keyboard) {
       // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
@@ -21,4 +21,52 @@ angular.module('starter', ['ionic', 'controllers'])
       StatusBar.styleDefault();
     }
   });
+
+  auth.hookEvents();
 })
+
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider, authProvider, $httpProvider, jwtInterceptorProvider){
+
+  $ionicConfigProvider.navBar.alignTitle('center');
+
+  $stateProvider
+    .state('login', {
+      url: '/login',
+      templateUrl: 'templates/login.html',
+      controller: 'loginController'
+    })
+    .state('tab',{
+      url: '/tab',
+      abstract: true,
+      templateUrl: 'templates/tabs.html'
+    })
+    .state('tab.home',{
+      url:'/home',
+      data: {
+        requiresLogin: true
+      },
+      views: {
+        'tab-home':{
+          templateUrl: 'templates/tabs-home.html',
+          controller: 'homeController'
+        }
+      }
+    })
+    .state('tab.list',{
+      url: '/list',
+      views: {
+        'tab-home': {
+          controller: 'listController',
+          templateUrl: 'templates/list.html'
+        }
+      }
+    });
+
+    $urlRouterProvider.otherwise('/tab/home');
+
+    authProvider.init({
+    domain: 'fugazzi.auth0.com',
+    clientID: 'XUfJmQqde9MB9Y5JezxpptospCG34clu',
+    loginState: 'login' // This is the name of the state where you'll show the login, which is defined above...
+  });
+});

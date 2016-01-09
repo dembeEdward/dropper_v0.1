@@ -1,0 +1,570 @@
+[
+  {
+    "Item": "3 Seated Couch",
+    "Category": 4
+  },
+  {
+    "Item": "2 Seated couch",
+    "Category": 3
+  },
+  {
+    "Item": "1 Seated couch",
+    "Category": 2
+  },
+  {
+    "Item": "Arm Chair",
+    "Category": 2
+  },
+  {
+    "Item": "Coffee Table",
+    "Category": 1
+  },
+  {
+    "Item": "Occasional Table",
+    "Category": 1
+  },
+  {
+    "Item": "Standing Lamp",
+    "Category": 1
+  },
+  {
+    "Item": "Table Lamp",
+    "Category": 1
+  },
+  {
+    "Item": "Hi-Fi Unit",
+    "Category": 2
+  },
+  {
+    "Item": "TV",
+    "Category": 2
+  },
+  {
+    "Item": "TV Cabinet",
+    "Category": 2
+  },
+  {
+    "Item": "M-Net/ VCR / DSTV",
+    "Category": 1
+  },
+  {
+    "Item": "Piano - Upright",
+    "Category": 4
+  },
+  {
+    "Item": "Piano - Baby grand",
+    "Category": 3
+  },
+  {
+    "Item": "Ottoman",
+    "Category": 1
+  },
+  {
+    "Item": "Display cabinet",
+    "Category": 2
+  },
+  {
+    "Item": "Wall unit No of Pieces",
+    "Category": 5
+  },
+  {
+    "Item": "Bookcase",
+    "Category": 3
+  },
+  {
+    "Item": "Room divider",
+    "Category": 5
+  },
+  {
+    "Item": "Pictures/Paintings",
+    "Category": 1
+  },
+  {
+    "Item": "Mirrors (S/M/L)",
+    "Category": 1
+  },
+  {
+    "Item": "Packed Boxes",
+    "Category": 1
+  },
+  {
+    "Item": "Telephone Table",
+    "Category": 1
+  },
+  {
+    "Item": "Half Moon Table",
+    "Category": 1
+  },
+  {
+    "Item": "Mirror",
+    "Category": 1
+  },
+  {
+    "Item": "Kist",
+    "Category": 1
+  },
+  {
+    "Item": "Hall/Hat Stand",
+    "Category": 1
+  },
+  {
+    "Item": "Pedestals & Glass top",
+    "Category": 1
+  },
+  {
+    "Item": "Packed Boxes",
+    "Category": 1
+  },
+  {
+    "Item": "dinning Table",
+    "Category": 5
+  },
+  {
+    "Item": "Chairs",
+    "Category": 1
+  },
+  {
+    "Item": "Sideboard",
+    "Category": 3
+  },
+  {
+    "Item": "Table Extension",
+    "Category": 3
+  },
+  {
+    "Item": "Server",
+    "Category": 1
+  },
+  {
+    "Item": "Tea Trolley",
+    "Category": 1
+  },
+  {
+    "Item": "Hostess Trolley",
+    "Category": 1
+  },
+  {
+    "Item": "Welsh Dresser",
+    "Category": 1
+  },
+  {
+    "Item": "Packed Boxes",
+    "Category": 1
+  },
+  {
+    "Item": "Desk/ L Shaped",
+    "Category": 2
+  },
+  {
+    "Item": "Office Chairs",
+    "Category": 1
+  },
+  {
+    "Item": "Computer Stand",
+    "Category": 2
+  },
+  {
+    "Item": "Computer/ Printer",
+    "Category": 1
+  },
+  {
+    "Item": "Fax Machine",
+    "Category": 1
+  },
+  {
+    "Item": "Credenza",
+    "Category": 1
+  },
+  {
+    "Item": "Bookcase",
+    "Category": 3
+  },
+  {
+    "Item": "2 Door Cupboard",
+    "Category": 3
+  },
+  {
+    "Item": "Filling Cabinet",
+    "Category": 1
+  },
+  {
+    "Item": "White Board",
+    "Category": 1
+  },
+  {
+    "Item": "Desk Lamps",
+    "Category": 1
+  },
+  {
+    "Item": "Mirrors / Paintings",
+    "Category": 1
+  },
+  {
+    "Item": "Carpets / Rug",
+    "Category": 1
+  },
+  {
+    "Item": "Packed Boxes",
+    "Category": 1
+  },
+  {
+    "Item": "bed king",
+    "Category": 5
+  },
+  {
+    "Item": "bed queen",
+    "Category": 4
+  },
+  {
+    "Item": "bed double",
+    "Category": 3
+  },
+  {
+    "Item": "bed single",
+    "Category": 2
+  },
+  {
+    "Item": "Coffee Table",
+    "Category": 1
+  },
+  {
+    "Item": "Occasional Table",
+    "Category": 1
+  },
+  {
+    "Item": "Standing Lamp",
+    "Category": 1
+  },
+  {
+    "Item": "Table Lamp",
+    "Category": 1
+  },
+  {
+    "Item": "Bar Stool",
+    "Category": 1
+  },
+  {
+    "Item": "Fridge Single door",
+    "Category": 3
+  },
+  {
+    "Item": "Fridge  double",
+    "Category": 5
+  },
+  {
+    "Item": "Chest Deep Freeze",
+    "Category": 3
+  },
+  {
+    "Item": "Coffee Machine",
+    "Category": 3
+  },
+  {
+    "Item": "Microwave",
+    "Category": 1
+  },
+  {
+    "Item": "Dishwasher",
+    "Category": 2
+  },
+  {
+    "Item": "Tumble Dryers",
+    "Category": 2
+  },
+  {
+    "Item": "Washing Machine",
+    "Category": 2
+  },
+  {
+    "Item": "Kitchen Table",
+    "Category": 2
+  },
+  {
+    "Item": "Kitchen Chairs",
+    "Category": 1
+  },
+  {
+    "Item": "Kitchen Cabinet",
+    "Category": 2
+  },
+  {
+    "Item": "Vacuum Cleaner",
+    "Category": 1
+  },
+  {
+    "Item": "Polisher/Shampooer",
+    "Category": 1
+  },
+  {
+    "Item": "Sewing Machine",
+    "Category": 1
+  },
+  {
+    "Item": "Heaters",
+    "Category": 1
+  },
+  {
+    "Item": "Carpets",
+    "Category": 1
+  },
+  {
+    "Item": "Washing Basket",
+    "Category": 1
+  },
+  {
+    "Item": "Clothes Horse",
+    "Category": 1
+  },
+  {
+    "Item": "Ironing Board",
+    "Category": 1
+  },
+  {
+    "Item": "Packed Boxes",
+    "Category": 1
+  },
+  {
+    "Item": "Bar Fridge",
+    "Category": 2
+  },
+  {
+    "Item": "Bar Counter",
+    "Category": 3
+  },
+  {
+    "Item": "Bar Stools",
+    "Category": 1
+  },
+  {
+    "Item": "Wine Rack",
+    "Category": 3
+  },
+  {
+    "Item": "Pedestals",
+    "Category": 1
+  },
+  {
+    "Item": "Headboard",
+    "Category": 3
+  },
+  {
+    "Item": "Dressing Table & Stool",
+    "Category": 3
+  },
+  {
+    "Item": "Chairs",
+    "Category": 1
+  },
+  {
+    "Item": "Wardrobe",
+    "Category": 5
+  },
+  {
+    "Item": "Chest of Drawers",
+    "Category": 3
+  },
+  {
+    "Item": "Occasional Tables",
+    "Category": 1
+  },
+  {
+    "Item": "Suitcases",
+    "Category": 2
+  },
+  {
+    "Item": "Cooler Box",
+    "Category": 1
+  },
+  {
+    "Item": "Water Machine",
+    "Category": 1
+  },
+  {
+    "Item": "Pram",
+    "Category": 1
+  },
+  {
+    "Item": "Bicycles",
+    "Category": 1
+  },
+  {
+    "Item": "Motorbike",
+    "Category": 3
+  },
+  {
+    "Item": "Pool Table",
+    "Category": 5
+  },
+  {
+    "Item": "Tennis Table",
+    "Category": 5
+  },
+  {
+    "Item": "Exercise Equipment",
+    "Category": 5
+  },
+  {
+    "Item": "Packed Boxes",
+    "Category": 1
+  },
+  {
+    "Item": "Work Bench",
+    "Category": 4
+  },
+  {
+    "Item": "Tool Box",
+    "Category": 1
+  },
+  {
+    "Item": "Ladder",
+    "Category": 3
+  },
+  {
+    "Item": "Wheel Barrow",
+    "Category": 2
+  },
+  {
+    "Item": "Lawnmower",
+    "Category": 2
+  },
+  {
+    "Item": "Edge Cutter",
+    "Category": 2
+  },
+  {
+    "Item": "Dustbin",
+    "Category": 3
+  },
+  {
+    "Item": "Gas Heater",
+    "Category": 1
+  },
+  {
+    "Item": "Generator",
+    "Category": 2
+  },
+  {
+    "Item": "Golf Bag",
+    "Category": 1
+  },
+  {
+    "Item": "Golf Chart",
+    "Category": 1
+  },
+  {
+    "Item": "Generator",
+    "Category": 1
+  },
+  {
+    "Item": "Fan",
+    "Category": 1
+  },
+  {
+    "Item": "Fish Rods",
+    "Category": 1
+  },
+  {
+    "Item": "Lockers",
+    "Category": 1
+  },
+  {
+    "Item": "Self Standing Selves",
+    "Category": 3
+  },
+  {
+    "Item": "Pot Plants Large",
+    "Category": 3
+  },
+  {
+    "Item": "Pot Plants Medium",
+    "Category": 2
+  },
+  {
+    "Item": "Pot Plants Small",
+    "Category": 1
+  },
+  {
+    "Item": "Empty Pot Plants L/M/S",
+    "Category": 1
+  },
+  {
+    "Item": "Garden Umbrella /Base",
+    "Category": 1
+  },
+  {
+    "Item": "Weber Braai",
+    "Category": 2
+  },
+  {
+    "Item": "Bird bath",
+    "Category": 2
+  },
+  {
+    "Item": "Large & Medium  Statues",
+    "Category": 4
+  },
+  {
+    "Item": "Small Statues",
+    "Category": 3
+  },
+  {
+    "Item": "Garden Bench",
+    "Category": 5
+  },
+  {
+    "Item": "Swings",
+    "Category": 5
+  },
+  {
+    "Item": "Jungle Gym",
+    "Category": 5
+  },
+  {
+    "Item": "Trampoline",
+    "Category": 5
+  },
+  {
+    "Item": "Wendy/Doll House",
+    "Category": 5
+  },
+  {
+    "Item": "Garden Hose",
+    "Category": 5
+  },
+  {
+    "Item": "Garden Tools",
+    "Category": 2
+  },
+  {
+    "Item": "Dog Kennel",
+    "Category": 2
+  },
+  {
+    "Item": "Patio Table",
+    "Category": 4
+  },
+  {
+    "Item": "Patio Chairs",
+    "Category": 1
+  },
+  {
+    "Item": "Pool Lounger",
+    "Category": 1
+  },
+  {
+    "Item": "Folding Table",
+    "Category": 1
+  },
+  {
+    "Item": "Folding Chairs",
+    "Category": 1
+  },
+  {
+    "Item": "Plastic Stacking Table",
+    "Category": 1
+  },
+  {
+    "Item": "Concrete Garden Set",
+    "Category": 1
+  }
+]
