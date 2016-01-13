@@ -188,63 +188,131 @@ app.controller('loginController', function(store, $scope, $location, auth, $http
      store.set('profile', profile);
      store.set('token', token);
      store.set('refreshToken', refreshToken);
-     $location.path('/');
+     $location.path('/tab/home');
    }, function() {
      // Error callback
    });
  }
-
  $scope.login();
 });
 
-app.controller('listController', function($scope, $firebaseArray, $location, store){
+app.controller('listController', function($scope, $firebaseArray, $location, store, $ionicModal, $ionicPopup, $ionicLoading){
 
-  var ref = new Firebase("https://fugazzidropper.firebaseio.com/items");
-  $scope.items = [];
-  $scope.itemsAdded = [];
-  var results = [];
-
-  ref.on('value', function(snapshot){
-
-    $scope.data = snapshot.val();
-
-    if(store.get('items')){
-      $scope.data = store.get('items');
-
-      for(var x=0; x<$scope.data.length; x++){
-        $scope.items[x] = $scope.data[x].Item
-      }
-      console.log($scope.items);
-    }else{
-      $scope.data = snapshot.val();
-      store.set('items', $scope.data);
-    }
+  $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true
   });
 
-  $scope.additems = function(){
+  $scope.itemsAdded = [];
+  var results = [];
+  $scope.selected = {};
+  $scope.selectedFilter = "";
+  $scope.showCheckout = false;
 
-    console.log($scope.selected);
-    //$scope.itemsAdded.push($scope.selectedItem);
-  };
+  var ref = new Firebase("https://fugazzidropper.firebaseio.com/items");
+  $scope.items = $firebaseArray(ref);
 
-  function suggest_state(term) {
+  $scope.items.$loaded()
+    .then(function(x) {
+      $ionicLoading.hide();
+    }).catch(function(error) {
+    console.log("Error:", error);
+  });
 
-      var q = term.toLowerCase().trim();
-      var results = [];
+  $scope.addItem = function(index, item){
 
-      for (var i = 0; i < $scope.items.length && results.length < 10; i++) {
+    var duplicates = false;
+    $scope.selected = item;
 
-          var item = $scope.items[i];
+    if($scope.itemsAdded.length < 10){
 
-          if (item.toLowerCase().indexOf(q) === 0)
-              results.push({ label: item, value: item });
+      for(var x=0; x<$scope.itemsAdded.length; x++){
+        if($scope.selected.Item == $scope.itemsAdded[x].Item){
+
+          var alertPopup = $ionicPopup.alert({
+            title: 'Sorry',
+            template: 'You have already added ' + $scope.selected.Item
+          });
+          duplicates = true;
+
+          alertPopup.then(function(res){
+            $scope.closeModal();
+          });
+
+          break;
+        }
       }
 
-      return results;
-  }
+      if(!duplicates){
+        $scope.itemsAdded.push($scope.selected);
 
-  $scope.autocomplete_options = {
-      suggest: suggest_state
+        if($scope.itemsAdded.length > 0){
+          $scope.showCheckout = true;
+        }else{
+          $scope.showCheckout = false;
+        }
+
+        $scope.closeModal();
+      }
+
+    }else{
+
+      var alertPopup = $ionicPopup.alert({
+        title: 'Sorry',
+        template: 'You can not add more than 10 items'
+      });
+
+      alertPopup.then(function(res){
+        $scope.closeModal();
+      });
+    }
   };
+
+  $scope.removeItem = function(index){
+
+    $scope.itemsAdded.splice(index, 1);
+
+    if($scope.itemsAdded.length > 0){
+      $scope.showCheckout = true;
+    }else{
+      $scope.showCheckout = false;
+    }
+  };
+
+  $ionicModal.fromTemplateUrl('../templates/list-modal.html', {
+    scope: $scope,
+    animation: 'slide-in-up'
+  }).then(function(modal){
+    $scope.modal = modal;
+  });
+
+  $scope.openModal = function(){
+    $scope.selectedFilter = "";
+
+    if($scope.itemsAdded.length > 0){
+      $scope.showCheckout = true;
+    }else{
+      $scope.showCheckout = false;
+    }
+
+    $scope.modal.show();
+  };
+
+  $scope.closeModal = function(){
+    $scope.modal.hide();
+  };
+
+  $scope.$on('$destroy', function(){
+    $scope.modal.remove();
+  });
+
+});
+
+app.controller('profileController', function($scope, store){
+
+  $scope.profile = store.get('profile');
+  console.log($scope.profile);
+
 
 });

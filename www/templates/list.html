@@ -1,16 +1,22 @@
 <ion-view title="Add Items" class="center">
 	<ion-content padding="true" ng-class="{'has-header has-tabs-top': platform.isAndroid(), 'has-header': !platform.isAndroid()}">
-    <div mass-autocomplete>
-        <input ng-model="selected"  mass-autocomplete-item="autocomplete_options" class="item item-input">
-      </div>
-      {{selected}}
-      <button class="button button-block button-positive" ng-click='additems()'>
-    Add
-  </button>
-  <ion-list>
-    <ion-item ng-repeat="item in itemsAdded">
-      {{item}}
-    </ion-item>
-  </ion-list>
+    <div class="list list-inset">
+			<label class="item item-input">
+				<i class="icon ion-search placeholder-icon"></i>
+				<input type="text" placeholder="Search" ng-click="openModal()">
+			</label>
+    </div>
+		<div class="button button-block button-balanced ion-ios-cart" ng-show="showCheckout">
+			Checkout
+		</div>
+		<ion-list>
+			<div class="item item-divider">
+				Items no: {{itemsAdded.length}} Max Items no: 10
+			</div>
+		  <ion-item ng-repeat="item in itemsAdded" class="item-icon-right">
+				<i class="icon ion-trash-a" ng-click="removeItem($index)"></i>
+				{{item.Item}}
+		  </ion-item>
+		</ion-list>
   </ion-content>
 </ion-view>

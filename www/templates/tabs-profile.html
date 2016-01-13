@@ -1,0 +1,20 @@
+<ion-view title="Profile" class="center">
+	<ion-content padding="true" ng-class="{'has-header has-tabs-top': platform.isAndroid(), 'has-header': !platform.isAndroid()}">
+    <div class="list card">
+      <div class="item item-avatar">
+        <img src="{{profile.picture}}">
+        <h2 ng-bind="profile.name"></h2>
+        <p ng-bind="profile.gender"></p>
+      </div>
+
+      <div class="item item-image">
+        <img src="{{profile.cover.source}}" style="height: 300px"/>
+      </div>
+    </div>
+
+    <div class="item item-icon-left dark" ng-repeat="device in profile.devices">
+      <i class="icon ion-android-phone-portrait"></i>
+      {{device.hardware}}
+    </div>
+  </ion-content>
+</ion-view>

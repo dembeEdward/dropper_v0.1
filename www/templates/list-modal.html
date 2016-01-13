@@ -1,0 +1,19 @@
+<ion-modal-view>
+  <ion-header-bar align-title="center" class="bar-positive">
+    <h1 class="title">This is a modal</h1>
+    <div class="buttons">
+      <button class="button button-icon icon ion-close" ng-click="closeModal()"></button>
+    </div>
+  </ion-header-bar>
+  <ion-content padding="true">
+    <label class="item item-input">
+      <i class="icon ion-search placeholder-icon"></i>
+      <input type="text" placeholder="Search" ng-model="selectedFilter">
+    </label>
+    <ion-list>
+		  <ion-item ng-repeat="item in items | filter: selectedFilter" ng-click="addItem($index, item)">
+				{{item.Item}}
+		  </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-modal-view>
