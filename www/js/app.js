@@ -65,17 +65,44 @@ angular.module('starter', ['ionic', 'controllers', 'directives','auth0', 'angula
       url: '/profile',
       views: {
         'tab-profile': {
-          templateUrl: '../templates/tabs-profile.html',
+          templateUrl: 'templates/tabs-profile.html',
           controller: 'profileController'
         }
       }
     });
 
-    $urlRouterProvider.otherwise('/login');
+    $urlRouterProvider.otherwise('/');
 
-    authProvider.init({
-    domain: 'fugazzi.auth0.com',
-    clientID: 'XUfJmQqde9MB9Y5JezxpptospCG34clu',
-    loginState: 'login' // This is the name of the state where you'll show the login, which is defined above...
+  jwtInterceptorProvider.tokenGetter = function(store) {
+    return store.get('token');
+  }
+
+  // Add a simple interceptor that will fetch all requests and add the jwt token to its authorization header.
+  $httpProvider.interceptors.push('jwtInterceptor');
+})
+.run(function($rootScope, auth, store, jwtHelper, $timeout, $state){
+
+  Auth0Lock('XUfJmQqde9MB9Y5JezxpptospCG34clu', 'fugazzi.auth0.com').show({
+    connections: ['google-oauth2', 'facebook'],
+    icon: 'http://tryimg.com/7/2016/01/25/TiBv.png',
+    dict: {
+    signin: {
+      title: "Login"
+    }
+  }
+  }, function(err, profile, token){
+
+    console.log(profile);
+    store.set('profile', profile);
+    store.set('token', token);
+
+
+    //store.set('refreshToken', refreshToken)
+    $timeout(function() {
+        $state.go('tab.home');
+    });
   });
+
+
+
 });

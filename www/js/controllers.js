@@ -1,6 +1,10 @@
 var app = angular.module('controllers', []);
 
-app.controller('homeController', function($scope, $ionicPopup, $window, $ionicLoading, $timeout, $location){
+app.controller('homeController', function($scope, $rootScope, $ionicPopup, $window, $ionicLoading, $timeout, $location, $state){
+
+  $scope.$on('$ionicView.beforeEnter', function() {
+  $rootScope.viewColor = '#00BFFF';
+});
 
     $ionicLoading.show({
       content: 'Loading',
@@ -134,8 +138,9 @@ app.controller('homeController', function($scope, $ionicPopup, $window, $ionicLo
           if(status ==  "OK"){
 
             var confirmQuotePopup = $ionicPopup.confirm({
-              title: 'Quote',
-              template: 'Pick up location : '+ chosenPickUp +'<br/> Destination Location : '+ chosenDestination +'<br/> Distance : ' + result.rows[0].elements[0].distance.text + '<br/> Time : ' + result.rows[0].elements[0].duration.text
+              title: 'Details',
+              template: 'Pick up location : '+ chosenPickUp +'<br/><br/> Destination Location : '+ chosenDestination +'<br/><br/> Distance : ' + result.rows[0].elements[0].distance.text + '<br/><br/> Time : ' + result.rows[0].elements[0].duration.text,
+              okText: 'Add Items'
             });
 
             confirmQuotePopup.then(function(res){
@@ -167,7 +172,27 @@ app.controller('homeController', function($scope, $ionicPopup, $window, $ionicLo
 
     $scope.reLoadState = function(){
 
-      $window.location.reload(true);
+      $ionicLoading.show({
+        content: 'Loading',
+        animation: 'fade-in',
+        showBackdrop: true
+      });
+
+      $scope.platform = ionic.Platform;
+      $scope.showAddPickUp = true;
+      $scope.showAddDestination = false;
+      $scope.showQuote = false;
+      $scope.gPlace;
+      $scope.map;
+      $scope.chosenPickUp = "";
+      $scope.chosenDestination = "";
+      $scope.geocoder = new google.maps.Geocoder;
+      $scope.infoWindow = new google.maps.InfoWindow;
+      $scope.distanceMatrix = new google.maps.DistanceMatrixService();
+      $scope.currentLocationString = "";
+      var pickUpResults = [];
+      var destinatonResults = [];
+      navigator.geolocation.getCurrentPosition(success);
     };
 
 
@@ -177,23 +202,6 @@ app.controller('homeController', function($scope, $ionicPopup, $window, $ionicLo
 
 app.controller('loginController', function(store, $scope, $location, auth, $http){
 
-  $scope.login = function() {
-   auth.signin({
-     authParams: {
-       scope: 'openid offline_access',
-       device: 'Mobile device'
-     }
-   }, function(profile, token, accessToken, state, refreshToken) {
-     // Success callback
-     store.set('profile', profile);
-     store.set('token', token);
-     store.set('refreshToken', refreshToken);
-     $location.path('/tab/home');
-   }, function() {
-     // Error callback
-   });
- }
- $scope.login();
 });
 
 app.controller('listController', function($scope, $firebaseArray, $location, store, $ionicModal, $ionicPopup, $ionicLoading){
@@ -280,7 +288,7 @@ app.controller('listController', function($scope, $firebaseArray, $location, sto
     }
   };
 
-  $ionicModal.fromTemplateUrl('../templates/list-modal.html', {
+  $ionicModal.fromTemplateUrl('templates/list-modal.html', { //../templates/list-modal.html -- for browswer testing
     scope: $scope,
     animation: 'slide-in-up'
   }).then(function(modal){
@@ -309,9 +317,19 @@ app.controller('listController', function($scope, $firebaseArray, $location, sto
 
 });
 
-app.controller('profileController', function($scope, store){
+app.controller('profileController', function($scope, store, $ionicLoading, $timeout){
+
+  $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true
+  });
 
   $scope.profile = store.get('profile');
+
+  $timeout(function(){
+    $ionicLoading.hide();
+  }, 2000);
   console.log($scope.profile);
 
 

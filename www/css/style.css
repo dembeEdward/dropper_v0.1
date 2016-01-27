@@ -3,3 +3,7 @@
     height:380px;
     width:335px;
 }
+
+.nav-bar-block, .bar {
+  background-color: inherit !important;
+}

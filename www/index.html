@@ -25,6 +25,7 @@
     <script src="http://maps.googleapis.com/maps/api/js?libraries=places&sensor=false"></script>
     <!-- Auth0 Lock -->
     <script src="lib/auth0-lock/build/auth0-lock.js"></script>
+
     <!-- auth0-angular -->
     <script src="lib/auth0-angular/build/auth0-angular.js"></script>
     <!-- angular storage -->
@@ -38,7 +39,7 @@
     <!--Ion-Autocomplete-->
     <script src="lib/ion-autocomplete/dist/ion-autocomplete.js"></script>
     <link href="lib/ion-autocomplete/dist/ion-autocomplete.css" rel="stylesheet">
-    
+
     <script type="text/javascript" src="js/autocomplete.js"></script>
     <script src="js/directives.js"></script>
     <script src="js/controllers.js"></script>
@@ -46,7 +47,7 @@
   </head>
   <body ng-app="starter">
 
-    <ion-nav-bar class="bar-calm">
+    <ion-nav-bar class="bar-clear" ng-style="{'background-color': viewColor}">
       <ion-nav-back-button>
       </ion-nav-back-button>
     </ion-nav-bar>
