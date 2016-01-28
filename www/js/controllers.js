@@ -367,13 +367,29 @@ app.controller('profileController', function($scope, store, $ionicLoading, $time
 
 });
 
-app.controller('checkoutController', function($scope, store){
+app.controller('checkoutController', function($scope, store, $ionicPopup){
 
   $scope.items = store.get('itemsSelected');
   $scope.pickUp = store.get('pickUp');
   $scope.destination = store.get('destination');
   $scope.time = store.get('time');
   $scope.distance = store.get('distance');
+  $scope.itemsNo = $scope.items.length;
 
+  $scope.showItemsPopUp = function(){
+
+    var popUpTemplate = "";
+
+    for(var x=0; x<$scope.items.length; x++){
+      popUpTemplate += $scope.items[x].Item + '<br/>';
+    }
+
+    console.log(popUpTemplate);
+
+    var alertPopup = $ionicPopup.alert({
+     title: 'Items',
+     template: popUpTemplate
+   });
+  };
 
 });

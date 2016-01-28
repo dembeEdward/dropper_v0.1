@@ -30,20 +30,27 @@
         <i class="icon ion-android-time"></i>
         {{time}}
       </a>
+			<div class="item item-divider">
+        Number of Items
+      </div>
+      <a class="item item-icon-left" href="#" ng-click="showItemsPopUp()">
+        <i class="icon ion-android-list"></i>
+        {{itemsNo}}
+				<span class="item-note">
+      		View Items
+    		</span>
+      </a>
       <div class="item item-divider">
         Price
       </div>
       <a class="item item-icon-left" href="#">
-        <i class="ion-card"></i>
+        <i class="icon ion-card"></i>
         R 0.00
       </a>
-  </div>
-  <button class="button button-block button-balanced">
-    Accept
-  </button>
-  <button class="button button-block button-assertive">
-    Decline
-  </button>
-
+  	</div>
+		<div class="button-bar">
+  	<a class="button button-block button-balanced">Accept</a>
+  	<a class="button button-block button-assertive">Decline</a>
+		</div>
   </ion-content>
 </ion-view>
