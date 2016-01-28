@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'controllers', 'directives','auth0', 'angular-storage', 'angular-jwt', 'firebase', 'ion-autocomplete'])
+angular.module('starter', ['ionic', 'ngCordova','controllers', 'directives','auth0', 'angular-storage', 'angular-jwt', 'firebase', 'ion-autocomplete'])
 
 .run(function($ionicPlatform, auth) {
   $ionicPlatform.ready(function() {
@@ -67,6 +67,15 @@ angular.module('starter', ['ionic', 'controllers', 'directives','auth0', 'angula
         'tab-profile': {
           templateUrl: 'templates/tabs-profile.html',
           controller: 'profileController'
+        }
+      }
+    })
+    .state('tab.quote',{
+      url: '/quote',
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/checkout.html',
+          controller: 'checkoutController'
         }
       }
     });

@@ -1,10 +1,10 @@
 var app = angular.module('controllers', []);
 
-app.controller('homeController', function($scope, $rootScope, $ionicPopup, $window, $ionicLoading, $timeout, $location, $state){
+app.controller('homeController', function($scope, $rootScope, $ionicPopup, $window, $ionicLoading, $timeout, $location, $state, $cordovaGeolocation, store){
 
-  $scope.$on('$ionicView.beforeEnter', function() {
-  $rootScope.viewColor = '#00BFFF';
-});
+    $scope.$on('$ionicView.beforeEnter', function() {
+      $rootScope.viewColor = '#00BFFF';
+    });
 
     $ionicLoading.show({
       content: 'Loading',
@@ -26,8 +26,9 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
     $scope.currentLocationString = "";
     var pickUpResults = [];
     var destinatonResults = [];
+    var options = {timeout: 10000, enableHighAccuracy: true};
 
-    var success = function(position){
+    $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
       var currentLatLong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       var mapOtions = {
@@ -37,18 +38,16 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
       };
 
       $scope.map = new google.maps.Map(document.getElementById("map"), mapOtions);
-      var geoLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
 
       $timeout(function(){
         $ionicLoading.hide();
-      }, 7000);
+      }, 2000);
 
       console.log($scope.infoWindow);
+    }, function(error){
 
-    //console.log(position.coords.latitude);
-    };
-
-    navigator.geolocation.getCurrentPosition(success);
+      alert("unable to get geolocation");
+    });
 
     $scope.addPickUpAddress = function(chosenPickUp){
 
@@ -73,6 +72,8 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
             $scope.infoWindow.setContent(results[0].formatted_address);
             $scope.infoWindow.open($scope.map, $scope.marker);
             pickUpResults = results;
+
+            store.set('pickUp', chosenPickUp);
           }else{
 
             window.alert('Geocoder faid due to ' + status);
@@ -113,6 +114,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
             $scope.infoWindow.open($scope.map, $scope.marker);
             destinatonResults = results;
 
+            store.set('destination', chosenDestination);
           }else{
 
             window.alert('Geocoder failed due to : ' + status);
@@ -145,6 +147,8 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
 
             confirmQuotePopup.then(function(res){
               if(res){
+                store.set('time', result.rows[0].elements[0].duration.text);
+                store.set('distance', result.rows[0].elements[0].distance.text);
                 $location.path('/tab/list');
               }
             });
@@ -192,7 +196,29 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
       $scope.currentLocationString = "";
       var pickUpResults = [];
       var destinatonResults = [];
-      navigator.geolocation.getCurrentPosition(success);
+
+      $cordovaGeolocation.getCurrentPosition(options).then(function(position){
+
+        var currentLatLong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        var mapOtions = {
+          zoom : 16,
+          center: currentLatLong,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+
+        $scope.map = new google.maps.Map(document.getElementById("map"), mapOtions);
+        var geoLatLng = {lat: position.coords.latitude, lng: position.coords.longitude};
+
+        $timeout(function(){
+          $ionicLoading.hide();
+        }, 7000);
+
+        console.log($scope.infoWindow);
+      }, function(error){
+
+        alert("unable to get geolocation");
+      });
+
     };
 
 
@@ -288,6 +314,12 @@ app.controller('listController', function($scope, $firebaseArray, $location, sto
     }
   };
 
+  $scope.checkout = function(){
+
+    store.set('itemsSelected', $scope.itemsAdded);
+    $location.path('/tab/quote');
+  };
+
   $ionicModal.fromTemplateUrl('templates/list-modal.html', { //../templates/list-modal.html -- for browswer testing
     scope: $scope,
     animation: 'slide-in-up'
@@ -331,6 +363,17 @@ app.controller('profileController', function($scope, store, $ionicLoading, $time
     $ionicLoading.hide();
   }, 2000);
   console.log($scope.profile);
+
+
+});
+
+app.controller('checkoutController', function($scope, store){
+
+  $scope.items = store.get('itemsSelected');
+  $scope.pickUp = store.get('pickUp');
+  $scope.destination = store.get('destination');
+  $scope.time = store.get('time');
+  $scope.distance = store.get('distance');
 
 
 });

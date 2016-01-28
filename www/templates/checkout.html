@@ -1,0 +1,49 @@
+<ion-view title="Checkout" class="center">
+	<ion-content padding="true" ng-class="{'has-header has-tabs-top': platform.isAndroid(), 'has-header': !platform.isAndroid()}">
+
+    <div class="list">
+      <div class="item item-divider">
+        Pickup Location
+      </div>
+      <a class="item item-icon-left" href="#">
+        <i class="icon ion-location"></i>
+        {{pickUp}}
+      </a>
+      <div class="item item-divider">
+        Destination Location
+      </div>
+      <a class="item item-icon-left" href="#">
+        <i class="icon ion-location"></i>
+        {{destination}}
+      </a>
+      <div class="item item-divider">
+        Distance
+      </div>
+      <a class="item item-icon-left" href="#">
+        <i class="icon ion-android-map"></i>
+        {{distance}}
+      </a>
+      <div class="item item-divider">
+        Time
+      </div>
+      <a class="item item-icon-left" href="#">
+        <i class="icon ion-android-time"></i>
+        {{time}}
+      </a>
+      <div class="item item-divider">
+        Price
+      </div>
+      <a class="item item-icon-left" href="#">
+        <i class="ion-card"></i>
+        R 0.00
+      </a>
+  </div>
+  <button class="button button-block button-balanced">
+    Accept
+  </button>
+  <button class="button button-block button-assertive">
+    Decline
+  </button>
+
+  </ion-content>
+</ion-view>
