@@ -13,7 +13,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
     });
 
     $scope.platform = ionic.Platform;
-    $scope.showAddPickUp = true;
+    $scope.showAddPickUp = false;
     $scope.showAddDestination = false;
     $scope.showQuote = false;
     $scope.gPlace;
@@ -27,11 +27,12 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
     var pickUpResults = [];
     var destinatonResults = [];
     var options = {timeout: 10000, enableHighAccuracy: true};
+    var infobox, currentLatLong;
 
     $cordovaGeolocation.getCurrentPosition(options).then(function(position){
 
       var currentLatLong = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-      var mapOtions = {
+       mapOtions = {
         zoom : 16,
         center: currentLatLong,
         mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -39,15 +40,57 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
 
       $scope.map = new google.maps.Map(document.getElementById("map"), mapOtions);
 
-      $timeout(function(){
-        $ionicLoading.hide();
-      }, 2000);
+      $scope.geocoder.geocode({'latLng' : currentLatLong}, function(results, status){
+
+        if(status == google.maps.GeocoderStatus.OK){
+
+          $scope.marker = new google.maps.Marker({
+            map: $scope.map,
+            position: currentLatLong,
+            title: 'Pick Up Location'
+          });
+
+          $scope.chosenPickUp = results[0].formatted_address;
+
+            infobox = new InfoBox({
+              content: document.getElementById("infobox"),
+              disableAutoPan: false,
+              maxWidth: 150,
+              pixelOffset: new google.maps.Size(-140, 0),
+              zIndex: null,
+              boxStyle: {
+                background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/examples/tipbox.gif') no-repeat",
+                opacity: 0.75,
+                width: "280px"
+              },
+              closeBoxMargin: "12px 4px 2px 2px",
+              closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
+              infoBoxClearance: new google.maps.Size(1, 1)
+        });
+
+          infobox.open($scope.map, $scope.marker);
+          $scope.map.panTo(currentLatLong);
+          //$scope.infoWindow.setContent(infoWindowContent);
+          //$scope.infoWindow.open($scope.map, $scope.marker);
+          $ionicLoading.hide();
+        }else{
+
+          window.alert('Geocoder faid due to ' + status);
+        }
+      });
 
       console.log($scope.infoWindow);
     }, function(error){
 
       alert("unable to get geolocation");
     });
+
+    $scope.notKeepLocation = function(){
+      $scope.chosenPickUp = "";
+      $scope.showAddPickUp = true;
+      infobox.close();
+      $scope.marker.setMap(null);
+    };
 
     $scope.addPickUpAddress = function(chosenPickUp){
 
@@ -142,7 +185,8 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
             var confirmQuotePopup = $ionicPopup.confirm({
               title: 'Details',
               template: '<b>Pick up location</b> : '+ chosenPickUp +'<br/><br/> <b>Destination Location : </b>'+ chosenDestination +'<br/><br/> <b>Distance : </b>' + result.rows[0].elements[0].distance.text + '<br/><br/> <b>Time : </b>' + result.rows[0].elements[0].duration.text,
-              okText: 'Add Items'
+              okText: 'Add Items',
+              cancelType: 'button-assertive',
             });
 
             confirmQuotePopup.then(function(res){
