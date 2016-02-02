@@ -141,7 +141,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
 
             var confirmQuotePopup = $ionicPopup.confirm({
               title: 'Details',
-              template: 'Pick up location : '+ chosenPickUp +'<br/><br/> Destination Location : '+ chosenDestination +'<br/><br/> Distance : ' + result.rows[0].elements[0].distance.text + '<br/><br/> Time : ' + result.rows[0].elements[0].duration.text,
+              template: '<b>Pick up location</b> : '+ chosenPickUp +'<br/><br/> <b>Destination Location : </b>'+ chosenDestination +'<br/><br/> <b>Distance : </b>' + result.rows[0].elements[0].distance.text + '<br/><br/> <b>Time : </b>' + result.rows[0].elements[0].duration.text,
               okText: 'Add Items'
             });
 
@@ -246,6 +246,8 @@ app.controller('listController', function($scope, $firebaseArray, $location, sto
 
   var ref = new Firebase("https://fugazzidropper.firebaseio.com/items");
   $scope.items = $firebaseArray(ref);
+
+  console.log($scope.items);
 
   $scope.items.$loaded()
     .then(function(x) {
@@ -367,7 +369,8 @@ app.controller('profileController', function($scope, store, $ionicLoading, $time
 
 });
 
-app.controller('checkoutController', function($scope, store, $ionicPopup){
+app.controller('checkoutController', function($scope, store, $ionicPopup, $firebaseArray){
+
 
   $scope.items = store.get('itemsSelected');
   $scope.pickUp = store.get('pickUp');
@@ -375,6 +378,39 @@ app.controller('checkoutController', function($scope, store, $ionicPopup){
   $scope.time = store.get('time');
   $scope.distance = store.get('distance');
   $scope.itemsNo = $scope.items.length;
+  $scope.discountRate = 0;
+  $scope.totalPriceRate = 0;
+  var prices = new Firebase("https://fugazzidropper.firebaseio.com/prices");
+
+
+  /*$scope.items.$loaded()
+    .then(function(x) {
+      $ionicLoading.hide();
+    }).catch(function(error) {
+    console.log("Error:", error);
+  });*/
+
+  for(var x=0; x<$scope.items.length; x++){
+    for(var y=0; y<prices.length; x++){
+      if($scope.items[x].category == prices[y].category){
+        $scope.items[x].rate = prices[y].category_rate;
+      }
+    }
+  }
+
+  if(parseInt($scope.distance) <= 10){
+          $scope.discountRate = 1;
+      }else if(parseInt($scope.distance) > 10 && parseInt($scope.distance) <= 20){
+          $scope.discountRate = 0.8;
+      }else if(parseInt($scope.distance) > 20 && parseInt($scope.distance) <= 30){
+          $scope.discountRate = 0.75;
+      }else if(parseInt($scope.distance) > 30 && parseInt($scope.distance)<= 40){
+          $scope.discountRate = 0.65;
+      }else{
+          $scope.discountRate = 0.6;;
+      }
+
+  $scope.totalPrice = ((parseFloat($scope.distance)) *  5 * ($scope.totalPriceRate + $scope.items.length) * ($scope.discountRate * $scope.items.length)/($scope.discountRate * $scope.items.length));
 
   $scope.showItemsPopUp = function(){
 
@@ -384,12 +420,13 @@ app.controller('checkoutController', function($scope, store, $ionicPopup){
       popUpTemplate += $scope.items[x].Item + '<br/>';
     }
 
-    console.log(popUpTemplate);
 
     var alertPopup = $ionicPopup.alert({
      title: 'Items',
      template: popUpTemplate
    });
   };
+
+
 
 });
