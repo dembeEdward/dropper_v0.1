@@ -78,6 +78,15 @@ angular.module('starter', ['ionic', 'ngCordova','controllers', 'directives','aut
           controller: 'checkoutController'
         }
       }
+    })
+    .state('tab.categories',{
+      url: '/categories',
+      views: {
+        'tab-home':{
+          templateUrl: 'templates/categories.html',
+          controller: 'listController'
+        }
+      }
     });
 
     $urlRouterProvider.otherwise('/');
@@ -96,7 +105,7 @@ angular.module('starter', ['ionic', 'ngCordova','controllers', 'directives','aut
     icon: 'http://tryimg.com/7/2016/01/25/TiBv.png',
     dict: {
     signin: {
-      title: "Login"
+      title: "Select Account To Login With"
     }
   }
   }, function(err, profile, token){

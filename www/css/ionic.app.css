@@ -5539,14 +5539,12 @@ ion-tabs.tabs-color-active-dark .tab-item {
 .popup-head {
   padding: 15px 10px;
   border-bottom: 1px solid #eee;
-  text-align: center;
-  background-color: #11c1f3;}
+  text-align: center; }
 
 .popup-title {
   margin: 0;
   padding: 0;
-  font-size: 15px;
-  color: white;}
+  font-size: 15px; }
 
 .popup-sub-title {
   margin: 5px 0 0 0;
@@ -9750,6 +9748,36 @@ a.button {
   display: none; }
 
 #infobox {
+  border: 2px solid black;
+  margin-top: 8px;
+  background: #333;
+  color: #FFF;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  padding: .5em 1em;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  text-shadow: 0 -1px #000000;
+  -webkit-box-shadow: 0 0  8px #000;
+  box-shadow: 0 0 8px #000; }
+
+#infobox2 {
+  border: 2px solid black;
+  margin-top: 8px;
+  background: #333;
+  color: #FFF;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 12px;
+  padding: .5em 1em;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  border-radius: 2px;
+  text-shadow: 0 -1px #000000;
+  -webkit-box-shadow: 0 0  8px #000;
+  box-shadow: 0 0 8px #000; }
+
+#infobox3 {
   border: 2px solid black;
   margin-top: 8px;
   background: #333;

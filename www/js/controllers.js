@@ -70,8 +70,6 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
 
           infobox.open($scope.map, $scope.marker);
           $scope.map.panTo(currentLatLong);
-          //$scope.infoWindow.setContent(infoWindowContent);
-          //$scope.infoWindow.open($scope.map, $scope.marker);
           $ionicLoading.hide();
         }else{
 
@@ -96,6 +94,11 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
 
       var alertOn = 0;
 
+      if(!$scope.showAddPickUp){
+        infobox.close();
+        $scope.marker.setMap(null);
+      }
+
       console.log(chosenPickUp);
 
       if(chosenPickUp.length < 10){
@@ -105,6 +108,8 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
 
         $scope.geocoder.geocode({'address' : chosenPickUp}, function(results, status){
 
+          pickUpResults = results;
+
           if(status == google.maps.GeocoderStatus.OK){
 
             $scope.marker = new google.maps.Marker({
@@ -112,9 +117,25 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
               position: results[0].geometry.location
             });
 
-            $scope.infoWindow.setContent(results[0].formatted_address);
-            $scope.infoWindow.open($scope.map, $scope.marker);
-            pickUpResults = results;
+            infobox = new InfoBox({
+              content: document.getElementById("infobox2"),
+              disableAutoPan: false,
+              maxWidth: 150,
+              pixelOffset: new google.maps.Size(-140, 0),
+              zIndex: null,
+              boxStyle: {
+                background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/examples/tipbox.gif') no-repeat",
+                opacity: 0.75,
+                width: "280px"
+              },
+              closeBoxMargin: "12px 4px 2px 2px",
+              closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
+              infoBoxClearance: new google.maps.Size(1, 1)
+        });
+
+          console.log($scope.map);
+          infobox.open($scope.map, $scope.marker);
+          $scope.map.panTo(currentLatLong);
 
             store.set('pickUp', chosenPickUp);
           }else{
@@ -143,7 +164,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
         $scope.geocoder.geocode({'address' : chosenDestination}, function(results, status){
 
           alertOn = 0;
-
+          destinatonResults = results;
           console.log(results);
 
           if(status == google.maps.GeocoderStatus.OK){
@@ -151,11 +172,26 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
               position: results[0].geometry.location,
               map: $scope.map
             });
+            infobox.close();
+            infobox = new InfoBox({
+              content: document.getElementById("infobox3"),
+              disableAutoPan: false,
+              maxWidth: 150,
+              pixelOffset: new google.maps.Size(-140, 0),
+              zIndex: null,
+              boxStyle: {
+                background: "url('http://google-maps-utility-library-v3.googlecode.com/svn/trunk/infobox/examples/tipbox.gif') no-repeat",
+                opacity: 0.75,
+                width: "280px"
+              },
+              closeBoxMargin: "12px 4px 2px 2px",
+              closeBoxURL: "http://www.google.com/intl/en_us/mapfiles/close.gif",
+              infoBoxClearance: new google.maps.Size(1, 1)
+        });
 
-            $scope.map.setZoom(9);
-            $scope.infoWindow.setContent(results[0].formatted_address);
-            $scope.infoWindow.open($scope.map, $scope.marker);
-            destinatonResults = results;
+          $scope.map.setZoom(9);
+          infobox.open($scope.map, $scope.marker);
+          $scope.map.panTo(currentLatLong);
 
             store.set('destination', chosenDestination);
           }else{
@@ -173,7 +209,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
     };
 
     $scope.showConfirmQuote = function(chosenPickUp, chosenDestination){
-
+      console.log(destinatonResults);
       $scope.distanceMatrix.getDistanceMatrix({
         origins: [pickUpResults[0].geometry.location],
         destinations: [destinatonResults[0].geometry.location],
@@ -193,7 +229,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
               if(res){
                 store.set('time', result.rows[0].elements[0].duration.text);
                 store.set('distance', result.rows[0].elements[0].distance.text);
-                $location.path('/tab/list');
+                $location.path('/tab/categories');
               }
             });
 
@@ -265,9 +301,6 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
 
     };
 
-
-
-
 });
 
 app.controller('loginController', function(store, $scope, $location, auth, $http){
@@ -288,19 +321,18 @@ app.controller('listController', function($scope, $firebaseArray, $location, sto
   $scope.selectedFilter = "";
   $scope.showCheckout = false;
 
-  var ref = new Firebase("https://fugazzidropper.firebaseio.com/items");
-  $scope.items = $firebaseArray(ref);
+  var categoriesRef = new Firebase("https://fugazzidropper.firebaseio.com/categories");
+  $scope.categories = $firebaseArray(categoriesRef);
 
-  console.log($scope.items);
-
-  $scope.items.$loaded()
+  $scope.categories.$loaded()
     .then(function(x) {
+      console.log($scope.categories);
       $ionicLoading.hide();
     }).catch(function(error) {
     console.log("Error:", error);
   });
 
-  $scope.addItem = function(index, item){
+  /*$scope.addItem = function(index, item){
 
     var duplicates = false;
     $scope.selected = item;
@@ -391,7 +423,7 @@ app.controller('listController', function($scope, $firebaseArray, $location, sto
 
   $scope.$on('$destroy', function(){
     $scope.modal.remove();
-  });
+  });*/
 
 });
 

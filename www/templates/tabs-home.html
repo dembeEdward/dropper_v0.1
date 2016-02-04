@@ -20,10 +20,22 @@
       <b>Pick Up Location</b><br/>
 			 {{chosenPickUp}}<br/>
 			 <div>
-				 <button class="button button-small button-dark">Keep Location</button>
+				 <button class="button button-small button-dark" ng-click="addPickUpAddress(chosenPickUp)">Keep Location</button>
   			 <button class="button button-small button-dark" ng-click="notKeepLocation()">Change Location</button>
 			 </div>
     </div>
-</div>
+	</div>
+	<div class="infobox-wrapper">
+		<div id="infobox2">
+			<b>Pick Up Location</b><br/>
+	 	{{chosenPickUp}}<br/>
+		</div>
+	</div>
+	<div class="infobox-wrapper">
+		<div id="infobox3">
+			<b>Destination Location</b><br/>
+	 		{{chosenDestination}}<br/>
+		</div>
+	</div>
   </ion-content>
 </ion-view>
