@@ -1,22 +1,27 @@
 <ion-view title="Add Items" class="center">
 	<ion-content padding="true" ng-class="{'has-header has-tabs-top': platform.isAndroid(), 'has-header': !platform.isAndroid()}">
     <div class="list list-inset">
-			<label class="item item-input">
-				<i class="icon ion-search placeholder-icon"></i>
-				<input type="text" placeholder="Search" ng-click="openModal()">
-			</label>
     </div>
-		<div class="button button-block button-balanced ion-ios-cart" ng-show="showCheckout" ng-click="checkout()">
-			Checkout
-		</div>
 		<ion-list>
 			<div class="item item-divider">
-				Items no: {{itemsAdded.length}} Max Items no: 10
+				Items no: {{checkoutList.length}} Max Items no: 10
 			</div>
-		  <ion-item ng-repeat="item in itemsAdded" class="item-icon-right">
-				<i class="icon ion-trash-a" ng-click="removeItem($index)"></i>
-				{{item.Item}}
+		  <ion-item ng-repeat="checkout in checkoutList" class="item-button-right">
+				<button class="button button-clear button-assertive" ng-click="removeItem($index)">
+					<i class="icon ion-trash-a"></i>
+				</button>
+				{{checkout.item.Item}}
 		  </ion-item>
 		</ion-list>
+		<div class="list list-inset">
+			<div class="button-bar">
+				<button class="button button-block button-positive" ng-click="addMoreItems()">
+		      Add More Items
+		    </button>
+				<div class="button button-block button-balanced ion-ios-cart" ng-click="checkOut()">
+					Checkout
+				</div>
+			</div>
+		</div>
   </ion-content>
 </ion-view>

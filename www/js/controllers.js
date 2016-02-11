@@ -1,5 +1,11 @@
 var app = angular.module('controllers', []);
 
+app.controller('inexController', function($scope, $ionicHistory){
+  $scope.myGoBack = function() {
+   $ionicHistory.goBack();
+ };
+});
+
 app.controller('homeController', function($scope, $rootScope, $ionicPopup, $window, $ionicLoading, $timeout, $location, $state, $cordovaGeolocation, store){
 
     $scope.$on('$ionicView.beforeEnter', function() {
@@ -16,6 +22,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
     $scope.showAddPickUp = false;
     $scope.showAddDestination = false;
     $scope.showQuote = false;
+    $scope.showAddPickUpSearch = true;
     $scope.gPlace;
     $scope.map;
     $scope.chosenPickUp = "";
@@ -148,6 +155,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
         if (alertOn == 0) {
           $scope.showAddDestination = true;
           $scope.showAddPickUp = false;
+          $scope.showAddPickUpSearch = false;
         }
       }
     };
@@ -229,6 +237,8 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
               if(res){
                 store.set('time', result.rows[0].elements[0].duration.text);
                 store.set('distance', result.rows[0].elements[0].distance.text);
+                store.set('pickUp', chosenPickUp);
+                store.set('destination', chosenDestination);
                 $location.path('/tab/categories');
               }
             });
@@ -307,7 +317,71 @@ app.controller('loginController', function(store, $scope, $location, auth, $http
 
 });
 
-app.controller('listController', function($scope, $firebaseArray, $location, store, $ionicModal, $ionicPopup, $ionicLoading){
+app.controller('listController', function($scope, $state, $ionicHistory, $ionicPopup, itemAdded, checkoutList){
+
+  console.log(itemAdded.getItemAdded());
+
+  $scope.checkoutList = checkoutList.getCheckoutList();
+
+  if($scope.checkoutList.length == 10){
+    var alertPopup = $ionicPopup.alert({
+      title: 'Too Many Items',
+      template: 'You have 10 items, you can not add anymore items'
+    });
+  }else{
+
+    $scope.checkoutList.push({item: itemAdded.getItemAdded()});
+    checkoutList.setCheckoutList($scope.checkoutList);
+
+    console.log($scope.checkoutList);
+  }
+
+  $scope.addMoreItems = function(){
+    if($scope.checkoutList.length == 10){
+      var alertPopup = $ionicPopup.alert({
+        title: 'Too Many Items',
+        template: 'You have 10 items, you can not add anymore items'
+      });
+    }else{
+        $ionicHistory.goBack(-2);
+    }
+  };
+
+  $scope.removeItem = function(index){
+
+    if($scope.checkoutList.length == 1){
+        var confirmPopup = $ionicPopup.confirm({
+          title: 'Are you sure?',
+          template: 'Are you sure you want to delete the last item?',
+          okText: 'Yes',
+          cancelType: 'button-assertive'
+        });
+
+        confirmPopup.then(function(res) {
+          if(res){
+            $scope.checkoutList.splice(index, 1);
+            checkoutList.setCheckoutList($scope.checkoutList);
+            $scope.checkoutList = checkoutList.getCheckoutList();
+            $ionicHistory.goBack(-2);
+          }else{
+            console.log('You are not sure');
+          }
+        });
+      }else{
+        $scope.checkoutList.splice(index, 1);
+        checkoutList.setCheckoutList($scope.checkoutList);
+        $scope.checkoutList = checkoutList.getCheckoutList();
+    }
+
+    console.log($scope.checkoutList);
+  };
+
+  $scope.checkOut = function(){
+    $state.go('tab.quote');
+  };
+});
+
+app.controller('categoriesController', function($scope, $state, $ionicLoading, categories, selectedCategory, store){
 
   $ionicLoading.show({
     content: 'Loading',
@@ -315,115 +389,52 @@ app.controller('listController', function($scope, $firebaseArray, $location, sto
     showBackdrop: true
   });
 
-  $scope.itemsAdded = [];
-  var results = [];
-  $scope.selected = {};
-  $scope.selectedFilter = "";
-  $scope.showCheckout = false;
+  $scope.categories = categories;
 
-  var categoriesRef = new Firebase("https://fugazzidropper.firebaseio.com/categories");
-  $scope.categories = $firebaseArray(categoriesRef);
-
-  $scope.categories.$loaded()
-    .then(function(x) {
-      console.log($scope.categories);
-      $ionicLoading.hide();
-    }).catch(function(error) {
-    console.log("Error:", error);
+  $scope.categories.$loaded().then(function(x){
+    console.log($scope.categories);
+    $ionicLoading.hide();
   });
 
-  /*$scope.addItem = function(index, item){
-
-    var duplicates = false;
-    $scope.selected = item;
-
-    if($scope.itemsAdded.length < 10){
-
-      for(var x=0; x<$scope.itemsAdded.length; x++){
-        if($scope.selected.Item == $scope.itemsAdded[x].Item){
-
-          var alertPopup = $ionicPopup.alert({
-            title: 'Sorry',
-            template: 'You have already added ' + $scope.selected.Item
-          });
-          duplicates = true;
-
-          alertPopup.then(function(res){
-            $scope.closeModal();
-          });
-
-          break;
-        }
-      }
-
-      if(!duplicates){
-        $scope.itemsAdded.push($scope.selected);
-
-        if($scope.itemsAdded.length > 0){
-          $scope.showCheckout = true;
-        }else{
-          $scope.showCheckout = false;
-        }
-
-        $scope.closeModal();
-      }
-
-    }else{
-
-      var alertPopup = $ionicPopup.alert({
-        title: 'Sorry',
-        template: 'You can not add more than 10 items'
-      });
-
-      alertPopup.then(function(res){
-        $scope.closeModal();
-      });
-    }
+  $scope.selectCategory = function(index){
+    var selected = "";
+    selected = $scope.categories[index].name;
+    selectedCategory.setSelected(selected);
+    $state.go('tab.selectedCategory');
   };
+});
 
-  $scope.removeItem = function(index){
+app.controller('selectedCategoryController', function($scope, $ionicLoading, $state,$ionicHistory, items, selectedCategory, itemAdded){
 
-    $scope.itemsAdded.splice(index, 1);
-
-    if($scope.itemsAdded.length > 0){
-      $scope.showCheckout = true;
-    }else{
-      $scope.showCheckout = false;
-    }
-  };
-
-  $scope.checkout = function(){
-
-    store.set('itemsSelected', $scope.itemsAdded);
-    $location.path('/tab/quote');
-  };
-
-  $ionicModal.fromTemplateUrl('templates/list-modal.html', { //../templates/list-modal.html -- for browswer testing
-    scope: $scope,
-    animation: 'slide-in-up'
-  }).then(function(modal){
-    $scope.modal = modal;
+  $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true
   });
 
-  $scope.openModal = function(){
-    $scope.selectedFilter = "";
+  console.log(selectedCategory.getSelected());
+  $scope.items = items;
+  var selected = selectedCategory.getSelected();
+  $scope.categoryItems = [];
 
-    if($scope.itemsAdded.length > 0){
-      $scope.showCheckout = true;
-    }else{
-      $scope.showCheckout = false;
+  $scope.items.$loaded().then(function(x){
+    console.log($scope.items);
+
+    for(var x=0; x<$scope.items.length; x++){
+      if($scope.items[x].Category_Name == selected){
+        $scope.categoryItems.push($scope.items[x]);
+      }
     }
 
-    $scope.modal.show();
-  };
+    console.log($scope.categoryItems);
+    $ionicLoading.hide();
+  });
 
-  $scope.closeModal = function(){
-    $scope.modal.hide();
-  };
+  $scope.addItem = function(item){
 
-  $scope.$on('$destroy', function(){
-    $scope.modal.remove();
-  });*/
+    itemAdded.setItemAdded(item);
+    $state.go('tab.list');
+  }
 
 });
 
@@ -445,36 +456,36 @@ app.controller('profileController', function($scope, store, $ionicLoading, $time
 
 });
 
-app.controller('checkoutController', function($scope, store, $ionicPopup, $firebaseArray){
+app.controller('checkoutController', function($scope, store, $ionicPopup, $state, prices, checkoutList){
 
-
-  $scope.items = store.get('itemsSelected');
   $scope.pickUp = store.get('pickUp');
   $scope.destination = store.get('destination');
   $scope.time = store.get('time');
   $scope.distance = store.get('distance');
+  $scope.items = checkoutList.getCheckoutList();
   $scope.itemsNo = $scope.items.length;
   $scope.discountRate = 0;
   $scope.totalPriceRate = 0;
-  var prices = new Firebase("https://fugazzidropper.firebaseio.com/prices");
+  $scope.categorySum = 0;
+  $scope.categorySumResult = 0;
+  var price = prices;
 
-
-  /*$scope.items.$loaded()
-    .then(function(x) {
-      $ionicLoading.hide();
-    }).catch(function(error) {
-    console.log("Error:", error);
-  });*/
-
-  for(var x=0; x<$scope.items.length; x++){
-    for(var y=0; y<prices.length; x++){
-      if($scope.items[x].category == prices[y].category){
-        $scope.items[x].rate = prices[y].category_rate;
+  price.$loaded().then(function(x){
+    console.log(prices);
+    console.log($scope.items[0].item);
+    for(var x=0; x<$scope.items.length; x++){
+      for(var y=0; y<price.length; y++){
+        if($scope.items[x].item.Category == price[y].category){
+          $scope.items[x].rate = prices[y].category_rate;
+        }
       }
     }
-  }
 
-  if(parseInt($scope.distance) <= 10){
+    for(var x=0; x<$scope.items.length; x++){
+      $scope.categorySum += $scope.items[x].item.Category;
+    }
+
+    if(parseInt($scope.distance) <= 10){
           $scope.discountRate = 1;
       }else if(parseInt($scope.distance) > 10 && parseInt($scope.distance) <= 20){
           $scope.discountRate = 0.8;
@@ -483,26 +494,35 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $fireb
       }else if(parseInt($scope.distance) > 30 && parseInt($scope.distance)<= 40){
           $scope.discountRate = 0.65;
       }else{
-          $scope.discountRate = 0.6;;
+          $scope.discountRate = 0.6;
       }
 
-  $scope.totalPrice = ((parseFloat($scope.distance)) *  5 * ($scope.totalPriceRate + $scope.items.length) * ($scope.discountRate * $scope.items.length)/($scope.discountRate * $scope.items.length));
+      if($scope.categorySum <= 5){
+        $scope.categorySumResult = 8;
+      }else if($scope.categorySum >5 && $scope.categorySum <10){
+        $scope.categorySumResult = 10;
+      }else if($scope.categorySum >= 10 && $scope.categorySum <=20){
+        $scope.categorySumResult = 12,5;
+      }else if($scope.categorySum > 20){
+        $scope.categorySumResult = 15;
+      }
 
-  $scope.showItemsPopUp = function(){
+      $scope.totalPrice = ((parseFloat($scope.distance)) *  $scope.categorySumResult * ($scope.totalPriceRate + $scope.items.length) * ($scope.discountRate * $scope.items.length)/($scope.discountRate * $scope.items.length));
 
-    var popUpTemplate = "";
+      $scope.showItemsPopUp = function(){
 
-    for(var x=0; x<$scope.items.length; x++){
-      popUpTemplate += $scope.items[x].Item + '<br/>';
-    }
+        var popUpTemplate = "";
 
+        for(var x=0; x<$scope.items.length; x++){
+          popUpTemplate += $scope.items[x].item.Item + '<br/>';
+        }
 
-    var alertPopup = $ionicPopup.alert({
-     title: 'Items',
-     template: popUpTemplate
-   });
-  };
+        var alertPopup = $ionicPopup.alert({
+          title: 'Items',
+          template: popUpTemplate
+        });
+    };
 
-
+  });
 
 });

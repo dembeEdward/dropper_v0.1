@@ -45,12 +45,14 @@
       </div>
       <a class="item item-icon-left" href="#">
         <i class="icon ion-card"></i>
-        R {{totalPrice}}
+        R {{totalPrice | number:2}}
       </a>
   	</div>
-		<div class="button-bar">
-  		<a class="button button-block button-balanced">Accept</a>
-  		<a class="button button-block button-assertive">Decline</a>
-		</div>
+		<div class="list list-inset">
+			<div class="button-bar">
+	  		<a class="button button-block button-balanced">Accept</a>
+	  		<a class="button button-block button-assertive">Decline</a>
+			</div>
+		</div>	
   </ion-content>
 </ion-view>

@@ -84,7 +84,16 @@ angular.module('starter', ['ionic', 'ngCordova','controllers', 'directives','aut
       views: {
         'tab-home':{
           templateUrl: 'templates/categories.html',
-          controller: 'listController'
+          controller: 'categoriesController'
+        }
+      }
+    })
+    .state('tab.selectedCategory',{
+      url: '/selectedCategory',
+      views: {
+        'tab-home': {
+          templateUrl: 'templates/categorey-items.html',
+          controller: 'selectedCategoryController'
         }
       }
     });
@@ -105,7 +114,7 @@ angular.module('starter', ['ionic', 'ngCordova','controllers', 'directives','aut
     icon: 'http://tryimg.com/7/2016/01/25/TiBv.png',
     dict: {
     signin: {
-      title: "Select Account To Login With"
+      title: "Select Account"
     }
   }
   }, function(err, profile, token){

@@ -1,7 +1,7 @@
 <ion-view title="categories" class="center">
 	<ion-content padding="true" ng-class="{'has-header has-tabs-top': platform.isAndroid(), 'has-header': !platform.isAndroid()}">
     <ion-list>
-      <ion-item ng-repeat="category in categories">
+      <ion-item ng-repeat="category in categories" ng-click="selectCategory($index)">
           {{category.name}}
       </ion-item>
     </ion-list>

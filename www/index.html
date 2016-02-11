@@ -44,10 +44,10 @@
     <script src="js/controllers.js"></script>
     <script src="js/app.js"></script>
   </head>
-  <body ng-app="starter">
+  <body ng-app="starter" ng-controller="inexController">
 
     <ion-nav-bar class="bar-clear" ng-style="{'background-color': viewColor}">
-      <ion-nav-back-button>
+      <ion-nav-back-button ng-click="myGoBack()">
       </ion-nav-back-button>
     </ion-nav-bar>
 
