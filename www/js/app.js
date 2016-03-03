@@ -106,6 +106,9 @@ angular.module('starter', ['ionic', 'ngCordova','controllers', 'directives','aut
 
   // Add a simple interceptor that will fetch all requests and add the jwt token to its authorization header.
   $httpProvider.interceptors.push('jwtInterceptor');
+  $httpProvider.defaults.useXDomain = true;
+  $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
+  delete $httpProvider.defaults.headers.common['X-Requested-With'];
 })
 .run(function($rootScope, auth, store, jwtHelper, $timeout, $state){
 

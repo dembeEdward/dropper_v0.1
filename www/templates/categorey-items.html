@@ -9,10 +9,8 @@
     <ion-list>
       <ion-item ng-repeat="categoryItem in categoryItems | filter: searchText" class="item item-button-right">
           {{categoryItem.Item}}
-          <button class="button button-clear button-balanced" ng-click="addItem(categoryItem)">
-						<i class="icon ion-plus-round"></i>
-						Add
-          </button>
+					<button class="button button-clear button-calm" ng-click="addItem(categoryItem)">
+						<i class="icon ion-plus-circled"></i>
       </ion-item>
     </ion-list>
   </ion-content>

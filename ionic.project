@@ -8,5 +8,11 @@
   "watchPatterns": [
     "www/**/*",
     "!www/lib/**/*"
+  ],
+  "proxies": [
+    {
+      "path": "http://104.131.71.253:3002/PayUAPI",
+      "proxyUrl": "http://104.131.71.253:3002/PayUAPI"
+    }
   ]
 }

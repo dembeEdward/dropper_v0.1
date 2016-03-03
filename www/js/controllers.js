@@ -229,8 +229,9 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
             var confirmQuotePopup = $ionicPopup.confirm({
               title: 'Details',
               template: '<b>Pick up location</b> : '+ chosenPickUp +'<br/><br/> <b>Destination Location : </b>'+ chosenDestination +'<br/><br/> <b>Distance : </b>' + result.rows[0].elements[0].distance.text + '<br/><br/> <b>Time : </b>' + result.rows[0].elements[0].duration.text,
-              okText: 'Add Items',
               cancelType: 'button-assertive',
+              okType: 'button-calm',
+              okText: 'Add Items'
             });
 
             confirmQuotePopup.then(function(res){
@@ -275,6 +276,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
       $scope.platform = ionic.Platform;
       $scope.showAddPickUp = true;
       $scope.showAddDestination = false;
+      $scope.showAddPickUpSearch = true;
       $scope.showQuote = false;
       $scope.gPlace;
       $scope.map;
@@ -354,6 +356,7 @@ app.controller('listController', function($scope, $state, $ionicHistory, $ionicP
           title: 'Are you sure?',
           template: 'Are you sure you want to delete the last item?',
           okText: 'Yes',
+          okType: 'button-calm',
           cancelType: 'button-assertive'
         });
 
@@ -456,7 +459,13 @@ app.controller('profileController', function($scope, store, $ionicLoading, $time
 
 });
 
-app.controller('checkoutController', function($scope, store, $ionicPopup, $state, prices, checkoutList){
+app.controller('checkoutController', function($scope, store, $ionicPopup, $ionicLoading, $state, prices, checkoutList, $http, $window, $cordovaInAppBrowser, $httpParamSerializerJQLike){
+
+  $ionicLoading.show({
+    content: 'Loading',
+    animation: 'fade-in',
+    showBackdrop: true
+  });
 
   $scope.pickUp = store.get('pickUp');
   $scope.destination = store.get('destination');
@@ -468,6 +477,8 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $state
   $scope.totalPriceRate = 0;
   $scope.categorySum = 0;
   $scope.categorySumResult = 0;
+  var ref = "";
+
   var price = prices;
 
   price.$loaded().then(function(x){
@@ -509,6 +520,20 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $state
 
       $scope.totalPrice = ((parseFloat($scope.distance)) *  $scope.categorySumResult * ($scope.totalPriceRate + $scope.items.length) * ($scope.discountRate * $scope.items.length)/($scope.discountRate * $scope.items.length));
 
+      if($scope.items.length == 1){
+        $scope.totalPrice = $scope.totalPrice * 0.8;
+      }else if($scope.items.length >1 && $scope.items.length <=3){
+       $scope.totalPrice = $scope.totalPrice * 0.7;
+      }else if($scope.items.length > 3 && $scope.items.length <=5){
+        $scope.totalPrice = $scope.totalPrice * 0.6;
+	    }else if($scope.items.length > 4 && $scope.items.length <=6){
+        $scope.totalPrice = $scope.totalPrice * 0.5;
+      }else if($scope.items.length > 6){
+        $scope.totalPrice = $scope.totalPrice *0.4;
+      }
+
+      $ionicLoading.hide();
+
       $scope.showItemsPopUp = function(){
 
         var popUpTemplate = "";
@@ -519,9 +544,65 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $state
 
         var alertPopup = $ionicPopup.alert({
           title: 'Items',
+          okType: 'button-calm',
           template: popUpTemplate
         });
     };
+
+    $scope.makePayment = function(){
+
+      var options = {
+        location: 'yes',
+        clearcache: 'no',
+        toolbar: 'no'
+      };
+
+      var payuPrice = $scope.totalPrice * 100;
+      console.log(payuPrice.toFixed(2).toString());
+      var myData = {
+        price : payuPrice
+      }
+
+      /*  $http.post('http://104.131.71.253:3001/PayUAPI', price).then(function(res){
+          console.log(res.data);
+          ref = res.data.substring(232, 244);
+
+          console.log(ref);
+          $cordovaInAppBrowser.open('https://staging.payu.co.za/rpp.do?PayUReference=' + ref, '_blank', options)
+            .then(function(event) {
+        // success
+            })
+            .catch(function(event) {
+        // error
+      });
+
+          //window.open('https://staging.payu.co.za/rpp.do?PayUReference=' + ref,'_blank');
+          //$location.path('https://staging.payu.co.za/rpp.do?PayUReference=' + ref);
+        }); */
+
+          $http({
+                method  : 'POST',
+                url     : 'http://104.131.71.253:3002/PayUAPI',
+                data    : $httpParamSerializerJQLike(myData),  // pass in data as strings
+                headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
+              })
+              .then(function(res) {
+
+                console.log(res.data);
+                ref = res.data.substring(232, 244);
+
+                console.log(ref);
+                $cordovaInAppBrowser.open('https://staging.payu.co.za/rpp.do?PayUReference=' + ref, '_blank', options)
+                  .then(function(event) {
+                    // success
+                  })
+                  .catch(function(event) {
+                    // error
+                });
+
+              });
+      };
+  //  };
 
   });
 

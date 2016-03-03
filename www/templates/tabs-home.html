@@ -9,11 +9,11 @@
         <i class="icon ion-search placeholder-icon"></i>
         <input type="text" placeholder="search destination" type="text" ng-model="chosenDestination" googleplace>
       </label>
-      <button class="button button-positive button-block" ng-click="addPickUpAddress(chosenPickUp)" ng-show="showAddPickUp">Add Pick Up</button>
-      <button class="button button-energized button-block" ng-click="addDestinationAddress(chosenDestination)" ng-show="showAddDestination">Add Destination</button>
+      <button class="button button-calm button-block" ng-click="addPickUpAddress(chosenPickUp)" ng-show="showAddPickUp">Add Pick Up</button>
+      <button class="button button-calm button-block" ng-click="addDestinationAddress(chosenDestination)" ng-show="showAddDestination">Add Destination</button>
 			<div class="button-bar">
-				<button class="button button-balanced button-block" ng-click="showConfirmQuote(chosenPickUp, chosenDestination)" ng-show="showQuote">Add Items</button>
-	      <button class="button button-assertive button-block" ng-click="reLoadState()" ng-show="showQuote">Change Location</button>
+				<button class="button button-calm button-block" ng-click="showConfirmQuote(chosenPickUp, chosenDestination)" ng-show="showQuote">Add Items</button>
+	      <button class="button button-stable button-block" ng-click="reLoadState()" ng-show="showQuote">Change Location</button>
 			</div>
     </div>
     <div id="map" data-tap-disabled="true"></div>

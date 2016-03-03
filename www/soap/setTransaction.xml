@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ns1="http://soap.api.controller.web.payjar.com/" xmlns:ns2="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+    <SOAP-ENV:Header>
+        <wsse:Security SOAP-ENV:mustUnderstand="1" xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd">
+            <wsse:UsernameToken wsu:Id="UsernameToken-9" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd">
+                <wsse:Username>100032</wsse:Username>
+                <wsse:Password Type="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-username-token-profile-1.0#PasswordText">PypWWegU</wsse:Password>
+            </wsse:UsernameToken>
+        </wsse:Security>
+    </SOAP-ENV:Header>
+    <SOAP-ENV:Body>
+        <ns1:setTransaction>
+            <Api>ONE_ZERO</Api>
+            <Safekey>{CE62CE80-0EFD-4035-87C1-8824C5C46E7F}</Safekey>
+            <TransactionType>PAYMENT</TransactionType>
+            <AdditionalInformation>
+                <redirectChannel>mobi</redirectChannel>
+            </AdditionalInformation>
+        </ns1:setTransaction>
+		<Basket>
+            <amountInCents>6707</amountInCents>
+            <currencyCode>ZAR</currencyCode>
+            <description>basketDesc_1395758213</description>
+        </Basket>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
