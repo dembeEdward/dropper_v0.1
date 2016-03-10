@@ -1,8 +1,11 @@
 <ion-view title="categories" class="center">
 	<ion-content padding="true" ng-class="{'has-header has-tabs-top': platform.isAndroid(), 'has-header': !platform.isAndroid()}">
     <ion-list>
-      <ion-item ng-repeat="category in categories" ng-click="selectCategory($index)">
-          {{category.name}}
+      <ion-item class="item item-button-right" ng-repeat="category in categories | orderBy: 'name'" ng-click="selectCategory(category.name)">
+          <b>{{category.name}}</b>
+					<button class="button button-clear button-calm">
+						<i class="icon ion-android-arrow-dropright-circle"></i>
+					</button>
       </ion-item>
     </ion-list>
   </ion-content>

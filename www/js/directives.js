@@ -76,3 +76,30 @@ app.service('checkoutList',function(){
     return this.checkoutList;
   };
 });
+
+app.service('payment', function(){
+
+  this.setDisplaymessage = function(message){
+    this.displayMessage = message;
+  };
+
+  this.setPrice = function(price){
+    this.price = price;
+  };
+
+  this.setReference = function(ref){
+    this.reference = ref;
+  };
+
+  this.getDisplayMessage = function(){
+    return this.displayMessage;
+  };
+
+  this.getPrice = function(){
+    return this.price;
+  };
+
+  this.getReference = function(){
+    return this.reference;
+  };
+});

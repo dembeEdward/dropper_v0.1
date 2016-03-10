@@ -1,0 +1,23 @@
+<ion-view title="Payment" class="center">
+	<ion-content padding="true" ng-class="{'has-header has-tabs-top': platform.isAndroid(), 'has-header': !platform.isAndroid()}">
+		<div class="list">
+
+  		<div class="item item-divider">
+    		Payment Details
+  		</div>
+
+  		<a class="item" href="#">
+    		Amount : R {{price}}
+  		</a>
+			<a class="item" href="#" ng-show="result">
+    		Reference No : {{reference}}
+  		</a>
+		</div>
+		<div class="button button-block button-balanced icon-left ion-checkmark-circled" ng-show="result">
+  		Payment {{displayMessage}}
+		</div>
+		<div class="button button-block button-assertive icon-left ion-android-cancel" ng-hide="result">
+  		Payment Failed
+		</div>
+  </ion-content>
+</ion-view>

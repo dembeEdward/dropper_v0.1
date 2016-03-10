@@ -7,10 +7,11 @@
       </label>
     </div>
     <ion-list>
-      <ion-item ng-repeat="categoryItem in categoryItems | filter: searchText" class="item item-button-right">
-          {{categoryItem.Item}}
+      <ion-item ng-repeat="categoryItem in categoryItems | filter: searchText | orderBy: 'Item'" class="item item-button-right">
+          <b>{{categoryItem.Item}}</b>
 					<button class="button button-clear button-calm" ng-click="addItem(categoryItem)">
 						<i class="icon ion-plus-circled"></i>
+					</button>
       </ion-item>
     </ion-list>
   </ion-content>

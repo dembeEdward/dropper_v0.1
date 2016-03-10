@@ -96,6 +96,14 @@ angular.module('starter', ['ionic', 'ngCordova','controllers', 'directives','aut
           controller: 'selectedCategoryController'
         }
       }
+    }).state('tab.payment', {
+      url: '/payment',
+      views: {
+        'tab-home':{
+          templateUrl: 'templates/checkoutResult.html',
+          controller: 'paymentController'
+        }
+      }
     });
 
     $urlRouterProvider.otherwise('/');
@@ -109,12 +117,13 @@ angular.module('starter', ['ionic', 'ngCordova','controllers', 'directives','aut
   $httpProvider.defaults.useXDomain = true;
   $httpProvider.defaults.headers.common['Access-Control-Allow-Headers'] = '*';
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
 })
 .run(function($rootScope, auth, store, jwtHelper, $timeout, $state){
 
   Auth0Lock('XUfJmQqde9MB9Y5JezxpptospCG34clu', 'fugazzi.auth0.com').show({
     connections: ['google-oauth2', 'facebook'],
-    icon: 'http://tryimg.com/7/2016/01/25/TiBv.png',
+    icon: 'http://tryimg.com/7/2016/03/08/RznhT.png',
     dict: {
     signin: {
       title: "Select Account"

@@ -12,6 +12,8 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
       $rootScope.viewColor = '#00BFFF';
     });
 
+    //$scope.reLoadState();
+
     $ionicLoading.show({
       content: 'Loading',
       animation: 'fade-in',
@@ -19,7 +21,7 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
     });
 
     $scope.platform = ionic.Platform;
-    $scope.showAddPickUp = false;
+    $scope.showAddPickUp = true;
     $scope.showAddDestination = false;
     $scope.showQuote = false;
     $scope.showAddPickUpSearch = true;
@@ -98,6 +100,9 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
     };
 
     $scope.addPickUpAddress = function(chosenPickUp){
+
+      infobox.close();
+      $scope.marker.setMap(null);
 
       var alertOn = 0;
 
@@ -399,11 +404,17 @@ app.controller('categoriesController', function($scope, $state, $ionicLoading, c
     $ionicLoading.hide();
   });
 
-  $scope.selectCategory = function(index){
+  $scope.selectCategory = function(name){
     var selected = "";
-    selected = $scope.categories[index].name;
-    selectedCategory.setSelected(selected);
-    $state.go('tab.selectedCategory');
+    console.log(name);
+
+    for(var x=0; x<$scope.categories.length; x++){
+      if(name == $scope.categories[x].name){
+        selected = $scope.categories[x].name;
+        selectedCategory.setSelected(selected);
+        $state.go('tab.selectedCategory')
+      }
+    }
   };
 });
 
@@ -459,7 +470,7 @@ app.controller('profileController', function($scope, store, $ionicLoading, $time
 
 });
 
-app.controller('checkoutController', function($scope, store, $ionicPopup, $ionicLoading, $state, prices, checkoutList, $http, $window, $cordovaInAppBrowser, $httpParamSerializerJQLike){
+app.controller('checkoutController', function($scope, store, $ionicPopup, $ionicLoading, $state, prices, checkoutList, $http, $window, $cordovaInAppBrowser, $httpParamSerializerJQLike, $timeout, $rootScope, $state, payment){
 
   $ionicLoading.show({
     content: 'Loading',
@@ -476,7 +487,9 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
   $scope.discountRate = 0;
   $scope.totalPriceRate = 0;
   $scope.categorySum = 0;
+  $scope.courier=true;
   $scope.categorySumResult = 0;
+
   var ref = "";
 
   var price = prices;
@@ -484,53 +497,68 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
   price.$loaded().then(function(x){
     console.log(prices);
     console.log($scope.items[0].item);
-    for(var x=0; x<$scope.items.length; x++){
-      for(var y=0; y<price.length; y++){
-        if($scope.items[x].item.Category == price[y].category){
-          $scope.items[x].rate = prices[y].category_rate;
-        }
-      }
-    }
 
     for(var x=0; x<$scope.items.length; x++){
-      $scope.categorySum += $scope.items[x].item.Category;
-    }
 
-    if(parseInt($scope.distance) <= 10){
-          $scope.discountRate = 1;
-      }else if(parseInt($scope.distance) > 10 && parseInt($scope.distance) <= 20){
-          $scope.discountRate = 0.8;
-      }else if(parseInt($scope.distance) > 20 && parseInt($scope.distance) <= 30){
-          $scope.discountRate = 0.75;
-      }else if(parseInt($scope.distance) > 30 && parseInt($scope.distance)<= 40){
-          $scope.discountRate = 0.65;
-      }else{
-          $scope.discountRate = 0.6;
-      }
+     for(var y=0; y<price.length; y++){
 
-      if($scope.categorySum <= 5){
-        $scope.categorySumResult = 8;
-      }else if($scope.categorySum >5 && $scope.categorySum <10){
-        $scope.categorySumResult = 10;
-      }else if($scope.categorySum >= 10 && $scope.categorySum <=20){
-        $scope.categorySumResult = 12,5;
-      }else if($scope.categorySum > 20){
-        $scope.categorySumResult = 15;
-      }
+       if($scope.items[x].item.Category == price[y].category){
 
-      $scope.totalPrice = ((parseFloat($scope.distance)) *  $scope.categorySumResult * ($scope.totalPriceRate + $scope.items.length) * ($scope.discountRate * $scope.items.length)/($scope.discountRate * $scope.items.length));
+         $scope.categorySumResult+=parseInt($scope.items[x].item.Category);
 
-      if($scope.items.length == 1){
-        $scope.totalPrice = $scope.totalPrice * 0.8;
-      }else if($scope.items.length >1 && $scope.items.length <=3){
-       $scope.totalPrice = $scope.totalPrice * 0.7;
-      }else if($scope.items.length > 3 && $scope.items.length <=5){
-        $scope.totalPrice = $scope.totalPrice * 0.6;
-	    }else if($scope.items.length > 4 && $scope.items.length <=6){
-        $scope.totalPrice = $scope.totalPrice * 0.5;
-      }else if($scope.items.length > 6){
-        $scope.totalPrice = $scope.totalPrice *0.4;
-      }
+
+         $scope.items[x].rate = prices[y].category_rate;
+
+         if($scope.courier==true && parseInt($scope.items[x].item.Category) ==1){
+             $scope.courier=true
+         }
+         else{
+           $scope.courier=false;
+         }
+       }
+
+       if($scope.items[x].item.Category >5){
+
+         $scope.items[x].rate = 0.2;
+       }
+     }
+   }
+
+   for(var x=0; x<$scope.items.length; x++){
+     $scope.categorySum += (parseFloat($scope.items[x].rate));
+   }
+
+   if(parseInt($scope.distance) <3){
+         $scope.discountRate = 5.5;
+     }else if(parseInt($scope.distance) >=3 && parseInt($scope.distance) <= 4){
+         $scope.discountRate = 4;
+     }else if(parseInt($scope.distance) >=5 && parseInt($scope.distance) <= 9){
+         $scope.discountRate = 2.5;
+     }else if(parseInt($scope.distance) >= 10 && parseInt($scope.distance) <= 19){
+         $scope.discountRate = 1.5;
+     }else if(parseInt($scope.distance) >= 20 && parseInt($scope.distance) <= 29){
+         $scope.discountRate = 1;
+     }else if(parseInt($scope.distance) >= 30 && parseInt($scope.distance)<= 40){
+         $scope.discountRate = 0.9;
+     }else{
+         $scope.discountRate = 0.8;
+     }
+
+
+     $scope.totalPrice = ((parseFloat($scope.distance)) *  20 * (1 + $scope.categorySum)) * $scope.discountRate;
+
+
+     if($scope.courier==true){
+
+       console.log("inside courier pricing");
+       $scope.totalPrice =(parseFloat($scope.totalPrice)*0.2);
+
+     }
+
+     if(parseInt($scope.categorySumResult)<=10){
+
+       $scope.totalPrice =(parseFloat($scope.totalPrice)*0.8);
+     }
 
       $ionicLoading.hide();
 
@@ -551,34 +579,30 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
 
     $scope.makePayment = function(){
 
-      var options = {
+      $ionicLoading.show({
+        content: 'Loading our payment system',
+        animation: 'fade-in',
+        showBackdrop: true
+      });
+
+      $timeout(function(){
+        $ionicLoading.hide();
+      }, 3000);
+
+      /*var options = {
         location: 'yes',
         clearcache: 'no',
         toolbar: 'no'
-      };
+      };*/
 
       var payuPrice = $scope.totalPrice * 100;
-      console.log(payuPrice.toFixed(2).toString());
+      console.log(payuPrice.toFixed(0).toString());
+      var payuPriceString = payuPrice.toFixed(0).toString();
       var myData = {
-        price : payuPrice
+        price : payuPriceString
       }
-
-      /*  $http.post('http://104.131.71.253:3001/PayUAPI', price).then(function(res){
-          console.log(res.data);
-          ref = res.data.substring(232, 244);
-
-          console.log(ref);
-          $cordovaInAppBrowser.open('https://staging.payu.co.za/rpp.do?PayUReference=' + ref, '_blank', options)
-            .then(function(event) {
-        // success
-            })
-            .catch(function(event) {
-        // error
-      });
-
-          //window.open('https://staging.payu.co.za/rpp.do?PayUReference=' + ref,'_blank');
-          //$location.path('https://staging.payu.co.za/rpp.do?PayUReference=' + ref);
-        }); */
+      var resultRef = {};
+      var ref = "";
 
           $http({
                 method  : 'POST',
@@ -589,9 +613,16 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
               .then(function(res) {
 
                 console.log(res.data);
-                ref = res.data.substring(232, 244);
-
+                ref = res.data.substring(232, 243);
+                //alert(ref);
                 console.log(ref);
+
+                var options = {
+                  location: 'no',
+                  clearcache: 'no',
+                  toolbar: 'no'
+                };
+
                 $cordovaInAppBrowser.open('https://staging.payu.co.za/rpp.do?PayUReference=' + ref, '_blank', options)
                   .then(function(event) {
                     // success
@@ -600,10 +631,69 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
                     // error
                 });
 
+                $rootScope.$on('$cordovaInAppBrowser:loadstart', function(e, event){
+
+                  // alert(event.url);
+                   var url27 = event.url.substring(0,27);
+
+                   if(url27 == "http://104.131.71.253:3003/"){
+
+                     resultRef = {ref : event.url.substring(42,53)};
+                     console.log(resultRef);
+                     $cordovaInAppBrowser.close();
+                   }
+                });
+
+                $rootScope.$on('$cordovaInAppBrowser:exit', function(e, event){
+
+                  //console.log(resultRef);
+                  $http({
+                        method  : 'POST',
+                        url     : 'http://104.131.71.253:3002/payuResult',
+                        data    : $httpParamSerializerJQLike(resultRef),  // pass in data as strings
+                        headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
+                      }).then(function(res){
+
+                        $ionicLoading.show({
+                          content: 'Loading our payment system',
+                          animation: 'fade-in',
+                          showBackdrop: true
+                        });
+
+                          var price = parseInt(res.data.substring(195,(205 - res.data.substring(195, 205).indexOf("<")))) / 100;
+                          var payuRef = res.data.substring(393, 404);
+                          var displayMessage = res.data.substring(305, 316);
+                          displayMessage = displayMessage.substr(1);
+                          //alert(displayMessage.substr(1));
+                          //if (displayMessage == "successfull")
+                          payment.setDisplaymessage(displayMessage);
+                          payment.setPrice(price);
+                          payment.setReference(payuRef);
+
+                          $state.go('tab.payment');
+                      });
+                });
+
               });
       };
   //  };
 
   });
+});
+
+app.controller('paymentController', function($scope, payment, $ionicLoading){
+
+  $scope.displayMessage = payment.getDisplayMessage();
+  $scope.price = payment.getPrice();
+  $scope.reference = payment.getReference();
+  $scope.result = true;
+``
+  if($scope.displayMessage == 'Successful'){
+    $scope.result = true;
+  }else{
+    $scope.result = false;
+  }
+
+  $ionicLoading.hide();
 
 });

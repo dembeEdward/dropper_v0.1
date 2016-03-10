@@ -56,7 +56,7 @@ app.post('/PayUAPI', function(req, res){
               <demoMode>true</demoMode>\
               <merchantReference>test01</merchantReference>\
               <notificationUrl>http://www.payu.co.za/ipn.do</notificationUrl>\
-              <returnUrl>https://www.payu.co.za/returnUrl.do</returnUrl>\
+              <returnUrl>http://104.131.71.253:3003</returnUrl>\
               <secure3d>false</secure3d>\
               <supportedPaymentMethods>CREDITCARD</supportedPaymentMethods>\
               <showBudget>false</showBudget>\
@@ -109,6 +109,12 @@ app.post('/PayUAPI', function(req, res){
 
 });
 
+app.post('/payuResult', function(req, res){
+
+  var ref = req.body.ref;
+  console.log(ref);
+});
+
 /*app.get('/getAllItems', function(req, res){
 
 	console.log('getting all items');
@@ -121,4 +127,4 @@ app.post('/PayUAPI', function(req, res){
 });*/
 
 server.listen(3002);
-console.log('App is listening on port : 3131');
+console.log('App is listening on port : 3002');

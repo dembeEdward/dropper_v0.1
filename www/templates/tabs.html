@@ -1,5 +1,5 @@
 <ion-tabs class="tabs-light tabs-icon-top">
-  <ion-tab title="Home" icon="ion-home" href="/tab/home">
+  <ion-tab title="Home" icon="ion-home" href="/tab/home" on-select="homeController.reLoadState()">
     <ion-nav-view name="tab-home"></ion-nav-view>
   </ion-tab>
 
