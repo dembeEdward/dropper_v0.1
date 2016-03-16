@@ -12,6 +12,8 @@ app.controller('homeController', function($scope, $rootScope, $ionicPopup, $wind
       $rootScope.viewColor = '#00BFFF';
     });
 
+
+
     //$scope.reLoadState();
 
     $ionicLoading.show({
@@ -470,7 +472,7 @@ app.controller('profileController', function($scope, store, $ionicLoading, $time
 
 });
 
-app.controller('checkoutController', function($scope, store, $ionicPopup, $ionicLoading, $state, prices, checkoutList, $http, $window, $cordovaInAppBrowser, $httpParamSerializerJQLike, $timeout, $rootScope, $state, payment){
+app.controller('checkoutController', function($scope, store, $ionicPopup, $ionicLoading, $state, prices, checkoutList, $http, $window, $cordovaInAppBrowser, $httpParamSerializerJQLike, $timeout, $rootScope, $state, payment, $ionicHistory){
 
   $ionicLoading.show({
     content: 'Loading',
@@ -577,6 +579,13 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
         });
     };
 
+    $scope.reLoadState = function(){
+
+      $ionicHistory.goBack(-4);
+    };
+
+
+
     $scope.makePayment = function(){
 
       $ionicLoading.show({
@@ -584,10 +593,6 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
         animation: 'fade-in',
         showBackdrop: true
       });
-
-      $timeout(function(){
-        $ionicLoading.hide();
-      }, 3000);
 
       /*var options = {
         location: 'yes',
@@ -654,11 +659,7 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
                         headers : { 'Content-Type': 'application/x-www-form-urlencoded' }  // set the headers so angular passing info as form data (not request payload)
                       }).then(function(res){
 
-                        $ionicLoading.show({
-                          content: 'Loading our payment system',
-                          animation: 'fade-in',
-                          showBackdrop: true
-                        });
+
 
                           var price = parseInt(res.data.substring(195,(205 - res.data.substring(195, 205).indexOf("<")))) / 100;
                           var payuRef = res.data.substring(393, 404);
@@ -669,8 +670,15 @@ app.controller('checkoutController', function($scope, store, $ionicPopup, $ionic
                           payment.setDisplaymessage(displayMessage);
                           payment.setPrice(price);
                           payment.setReference(payuRef);
+                          //alert(displayMessage);
+                          if(displayMessage == "You chose " || displayMessage == "Successful"){
 
-                          $state.go('tab.payment');
+                            $state.go('tab.payment');
+                            $ionicLoading.hide();
+                          }else{
+                            $ionicLoading.hide();
+                          }
+
                       });
                 });
 
@@ -687,10 +695,10 @@ app.controller('paymentController', function($scope, payment, $ionicLoading){
   $scope.price = payment.getPrice();
   $scope.reference = payment.getReference();
   $scope.result = true;
-``
-  if($scope.displayMessage == 'Successful'){
+
+  if($scope.displayMessage == "Successful"){
     $scope.result = true;
-  }else{
+  }else if($scope.displayMessage == "You chose "){
     $scope.result = false;
   }
 

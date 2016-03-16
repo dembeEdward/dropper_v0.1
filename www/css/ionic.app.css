@@ -9794,3 +9794,7 @@ a.button {
 
 #paymentMessageSuccess {
   background-color: green; }
+
+  #search{
+    width: 100%;
+  }
